@@ -1,0 +1,15 @@
+{
+    "list.insertMappings": {
+        "<C-j>": "do:next"
+    },
+    "latex.build.executable": "xelatex",
+    "latex.forwardSearch.executable": "open",
+     "suggest.noselect": false,
+    "languageserver": {
+    "golang": {
+      "command": "~/go/bin/gopls",
+      "rootPatterns": ["go.mod"],
+      "filetypes": ["go"]
+    }
+  }
+}
