@@ -5,8 +5,26 @@
 [user]
 	name = Colin
 	email = qingyu.wang@aliyun.com
+	signingkey = AA0ECF2B46322AA167B5ECBC543E6853ED2151E4
 [filter "lfs"]
 	required = true
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
+[ui]
+	color = true
+	branch = true
+[diff]
+	submodule = log
+[core]
+	trustctime = false
+	untrackedCache = true
+	editor = nvim
+[commit]
+	gpgsign = true
+[url "https://github"]
+	insteadOf = git://github
+[apply]
+	whitespace = fix
+[help]
+	autocorrect = 1
