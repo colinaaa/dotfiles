@@ -1,5 +1,5 @@
 set -l PA ""
-
+set --export GOPATH $HOME/go
 set -l paths "
 # yarn binary
 $HOME/.yarn/bin
@@ -15,4 +15,4 @@ for entry in (string split \n $paths)
     end
 end
 
-set --export PATH $PA
+set --export PATH $PATH $PA
