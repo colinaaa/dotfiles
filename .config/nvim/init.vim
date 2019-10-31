@@ -8,12 +8,28 @@ call plug#begin(stdpath('data') . '/plugged')
 " On-demand loading
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'Xuyuanp/nerdtree-git-plugin'
+
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
+
 Plug 'vim-airline/vim-airline'
 Plug 'ryanoasis/vim-devicons'
+Plug 'mhinz/vim-startify'
+
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
+
+Plug 'editorconfig/editorconfig-vim'
+
+Plug '/usr/local/opt/fzf'
+Plug 'junegunn/fzf.vim'
+
+Plug 'jiangmiao/auto-pairs'
+
 " Initialize plugin system
 call plug#end()
 " [basic]
@@ -26,6 +42,7 @@ set shiftwidth=4
 set expandtab
 set cursorline
 set textwidth=150
+set linespace=3
 set linebreak
 set showbreak=...
 set wrap
@@ -88,7 +105,6 @@ inoremap jk <esc>
 
 " shortcut to save
 nmap <leader>, :w<cr>
-nmap <leader>s :source %<cr>
 
 " edit ~/.config/nvim/init.vim
 map <leader>ev :e! ~/.config/nvim/init.vim<cr>
@@ -105,6 +121,8 @@ nmap <leader><space><space> :%s/\n\{2,}/\r\r/g<cr>
 
 " switch between current and last buffer
 nmap <leader>. <c-^>
+
+nmap <leader>f :call CocAction('format')<cr>
 
 " Window moving
 map <silent> <C-h> <Plug>WinMoveLeft
@@ -133,7 +151,7 @@ set updatetime=300
 
 " don't give |ins-completion-menu| messages.
 set shortmess+=c
-
+set cmdheight=1
 " always show signcolumns
 set signcolumn=yes
 
@@ -153,8 +171,22 @@ function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
+" Use <C-d> for select selections ranges, needs server support, like: coc-tsserver, coc-python
+nmap <silent> <C-d> <Plug>(coc-range-select)
+xmap <silent> <C-d> <Plug>(coc-range-select)
 
-" [snippets]
+
+" Use `:Format` to format current buffer
+command! -nargs=0 Format :call CocAction('format')
+
+" Use `:Fold` to fold current buffer
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+" use `:OR` for organize import of current buffer
+command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+
+" Add status line support, for integration with other plugin, checkout `:h coc-status`
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
 " -- documentation
 " Use K to show documentation in preview window
@@ -178,3 +210,74 @@ command! LatexBuild :exe 'CocCommand latex.Build'
 map <C-n> :NERDTreeToggle<CR>
 autocmd StdinReadPre * let s:std_in=1
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+augroup nerdtree
+            autocmd!
+            autocmd FileType nerdtree setlocal nolist " turn off whitespace characters
+            autocmd FileType nerdtree setlocal nocursorline " turn off line highlighting for performance
+augroup END
+let NERDTreeShowHidden=1
+
+" Toggle NERDTree
+function! ToggleNerdTree()
+            if @% != "" && @% !~ "Startify" && (!exists("g:NERDTree") || (g:NERDTree.ExistsForTab() && !g:NERDTree.IsOpen()))
+                :NERDTreeFind
+            else
+                :NERDTreeToggle
+            endif
+endfunction
+"
+" ---------------------------------------------------------------
+" [fzf]
+let g:fzf_layout = { 'down': '~25%' }
+
+if isdirectory(".git")
+" if in a git project, use :GFiles
+    nmap <silent> <leader>t :GitFiles --cached --others --exclude-standard<cr>
+else
+" otherwise, use :FZF
+    nmap <silent> <leader>t :FZF<cr>
+endif
+
+nmap <silent> <leader>s :GFiles?<cr>
+
+nmap <silent> <leader>r :Buffers<cr>
+nmap <silent> <leader>e :FZF<cr>
+nmap <leader><tab> <plug>(fzf-maps-n)
+xmap <leader><tab> <plug>(fzf-maps-x)
+omap <leader><tab> <plug>(fzf-maps-o)
+
+" ---------------------------------------------------------------
+" git
+nmap <silent> <leader>gs :Gstatus<cr>
+nmap <leader>ge :Gedit<cr>
+nmap <silent><leader>gr :Gread<cr>
+nmap <silent><leader>gb :Gblame<cr>
+
+" startify
+" Don't change to directory when selecting a file
+let g:startify_files_number = 5
+let g:startify_change_to_dir = 0
+let g:startify_custom_header = [ ]
+let g:startify_relative_path = 1
+let g:startify_use_env = 1
+        " Custom startup list, only show MRU from current directory/project
+let g:startify_lists = [
+\  { 'type': 'dir',       'header': [ 'Files '. getcwd() ] },
+\  { 'type': function('helpers#startify#listcommits'), 'header': [ 'Recent Commits' ] },
+\  { 'type': 'sessions',  'header': [ 'Sessions' ]       },
+\  { 'type': 'bookmarks', 'header': [ 'Bookmarks' ]      },
+\  { 'type': 'commands',  'header': [ 'Commands' ]       },
+\ ]
+        let g:startify_commands = [
+\   { 'up': [ 'Update Plugins', ':PlugUpdate' ] },
+\   { 'ug': [ 'Upgrade Plugin Manager', ':PlugUpgrade' ] },
+\ ]
+        let g:startify_bookmarks = [
+\ { 'c': '~/.config/nvim/init.vim' },
+\ { 'g': '~/.gitconfig' },
+\ { 'z': '~/.zshrc' }
+\ ]
+autocmd User Startified setlocal cursorline
+nmap <leader>st :Startify<cr>
+

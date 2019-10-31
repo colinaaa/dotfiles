@@ -2,14 +2,25 @@
     "list.insertMappings": {
         "<C-j>": "do:next"
     },
-    "latex.build.executable": "xelatex",
+    "latex.build.executable": "lualatex",
     "latex.forwardSearch.executable": "open",
+    "latex.build.onSave": true,
      "suggest.noselect": false,
     "languageserver": {
     "golang": {
       "command": "~/go/bin/gopls",
       "rootPatterns": ["go.mod"],
       "filetypes": ["go"]
+    },
+    "clangd": {
+      "command": "clangd",
+      "args": ["--background-index", "--compile-commands-dir=./build"],
+      "rootPatterns": ["compile_flags.txt", "compile_commands.json", ".vim/", ".git/", ".hg/"],
+      "filetypes": ["c", "cpp", "objc", "objcpp"]
     }
-  }
+  },
+  "coc.preferences.formatOnSaveFiletypes": [
+      "cpp",
+      "gopls"
+  ]
 }
