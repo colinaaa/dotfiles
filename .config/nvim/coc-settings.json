@@ -21,6 +21,7 @@
   },
   "coc.preferences.formatOnSaveFiletypes": [
       "cpp",
-      "gopls"
+      "gopls",
+      "golang"
   ]
 }

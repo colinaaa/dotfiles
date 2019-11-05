@@ -1,5 +1,4 @@
-" Specify a directory for plugins
-" - For Neovim: stdpath('data') . '/plugged'
+" Specify a directory for plugins For Neovim: stdpath('data') . '/plugged'
 " - Avoid using standard Vim directory names like 'plugin'
 call plug#begin(stdpath('data') . '/plugged')
 
@@ -8,18 +7,24 @@ call plug#begin(stdpath('data') . '/plugged')
 " On-demand loading
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'junegunn/goyo.vim'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'ryanoasis/vim-devicons'
+Plug 'mhinz/vim-startify'
+Plug 'cocopon/iceberg.vim'
+Plug 'majutsushi/tagbar'
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'octol/vim-cpp-enhanced-highlight'
+Plug 'tpope/vim-markdown'
+Plug 'luochen1990/rainbow'
 
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
-
-Plug 'vim-airline/vim-airline'
-Plug 'ryanoasis/vim-devicons'
-Plug 'mhinz/vim-startify'
-
 Plug 'tpope/vim-surround'
+
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 
@@ -29,7 +34,7 @@ Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 
 Plug 'jiangmiao/auto-pairs'
-
+Plug 'scrooloose/nerdcommenter'
 " Initialize plugin system
 call plug#end()
 " [basic]
@@ -122,7 +127,11 @@ nmap <leader><space><space> :%s/\n\{2,}/\r\r/g<cr>
 " switch between current and last buffer
 nmap <leader>. <c-^>
 
-nmap <leader>f :call CocAction('format')<cr>
+" quickfix
+nmap <leader>qf  <Plug>(coc-fix-current)
+
+" exit terminal
+tnoremap <Esc> <C-\><C-n>
 
 " Window moving
 map <silent> <C-h> <Plug>WinMoveLeft
@@ -175,19 +184,6 @@ endfunction
 nmap <silent> <C-d> <Plug>(coc-range-select)
 xmap <silent> <C-d> <Plug>(coc-range-select)
 
-
-" Use `:Format` to format current buffer
-command! -nargs=0 Format :call CocAction('format')
-
-" Use `:Fold` to fold current buffer
-command! -nargs=? Fold :call     CocAction('fold', <f-args>)
-
-" use `:OR` for organize import of current buffer
-command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
-
-" Add status line support, for integration with other plugin, checkout `:h coc-status`
-set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-
 " -- documentation
 " Use K to show documentation in preview window
 nnoremap <silent> K :call <SID>show_documentation()<CR>
@@ -204,6 +200,7 @@ endfunction
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
 command! LatexBuild :exe 'CocCommand latex.Build'
+map <C-b> :TagbarToggle<CR>
 
 " ---------------------------------------------------------------
 "  [nerdtree]
@@ -226,6 +223,7 @@ function! ToggleNerdTree()
                 :NERDTreeToggle
             endif
 endfunction
+let NERDTreeIgnore=['\.o$', '\~$', '\.aux$','\.lof$','\.synctex\.gz$', '\.thm$','\.toc$','\.log$', '\.lot$','^\.git$']
 "
 " ---------------------------------------------------------------
 " [fzf]
@@ -240,12 +238,14 @@ else
 endif
 
 nmap <silent> <leader>s :GFiles?<cr>
+nmap <silent> <leader>f :Files<cr>
 
 nmap <silent> <leader>r :Buffers<cr>
-nmap <silent> <leader>e :FZF<cr>
 nmap <leader><tab> <plug>(fzf-maps-n)
 xmap <leader><tab> <plug>(fzf-maps-x)
 omap <leader><tab> <plug>(fzf-maps-o)
+
+nmap<leader>d <plug>(coc-definition)
 
 " ---------------------------------------------------------------
 " git
@@ -253,6 +253,8 @@ nmap <silent> <leader>gs :Gstatus<cr>
 nmap <leader>ge :Gedit<cr>
 nmap <silent><leader>gr :Gread<cr>
 nmap <silent><leader>gb :Gblame<cr>
+highlight link GitGutterChangeLine DiffText
+nmap <silent> gl :GitGutterLineHighlightsToggle<cr>
 
 " startify
 " Don't change to directory when selecting a file
@@ -280,4 +282,57 @@ let g:startify_lists = [
 \ ]
 autocmd User Startified setlocal cursorline
 nmap <leader>st :Startify<cr>
+
+" [go]
+au FileType go nmap <Leader>i <Plug>(go-imports)
+au FileType go nmap <Leader>gd <Plug>(go-doc)
+au FileType go nmap <Leader>s <Plug>(go-implements)
+au FileType go nmap <Leader>e <Plug>(go-rename)
+
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_types = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_build_constraints = 1
+let g:go_fmt_command = "goimports"
+
+" [startify]
+let g:startify_custom_header=[
+\ "                                         -`",
+\ "                                        .o+`",
+\ "                                       `ooo/",
+\ "                                      `+oooo:",
+\ "                                     `+oooooo:",
+\ "                                     -+oooooo+:",
+\ "                                   `/:-:++oooo+:",
+\ "                                  `/++++/+++++++:",
+\ "                                 `/++++++++++++++:",
+\ "                                `/+++ooooooooooooo/`",
+\ "                               ./ooosssso++osssssso+`",
+\ "                              .oossssso-````/ossssss+`",
+\ "                             -osssssso.      :ssssssso.",
+\ "                            :osssssss/        osssso+++.",
+\ "                           /ossssssss/        +ssssooo/-",
+\ "                         `/ossssso+/:-        -:/+osssso+-",
+\ "                        `+sso+:-`                 `.-/+oso:",
+\ "                       `++:.                           `-/+/",
+\ "                       .`                                   `"]
+
+" [airline]
+"extensions
+let g:airline#extensions#coc#enabled = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_theme='iceberg'
+"extension settings
+let airline#extensions#coc#stl_format_err = '%E{[%e(#%fe)]}'
+let airline#extensions#coc#stl_format_warn = '%W{[%w(#%fw)]}'
+let airline#extensions#coc#warning_symbol = ':'
+let airline#extensions#coc#error_symbol = ':'
+
+" [cpp-syntax-highlighting]
+let g:cpp_class_scope_highlight = 1
+let g:cpp_member_variable_highlight = 1
+let g:cpp_class_decl_highlight = 1
+let g:cpp_experimental_template_highlight = 1
 
