@@ -1,5 +1,7 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhistcnt =7
+let g:netrw_dirhistcnt =9
+let g:netrw_dirhist_9='/Users/colin/.config/fish'
+let g:netrw_dirhist_8='/Users/colin/Documents'
 let g:netrw_dirhist_7='/Users/colin/Projects/hello-ds/src'
 let g:netrw_dirhist_6='/Users/colin/Projects/hello-ds'
 let g:netrw_dirhist_5='/Users/colin/Projects/hello-ds/src/lab'

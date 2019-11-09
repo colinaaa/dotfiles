@@ -17,6 +17,11 @@
       "args": ["--background-index", "--compile-commands-dir=./build"],
       "rootPatterns": ["compile_flags.txt", "compile_commands.json", ".vim/", ".git/", ".hg/"],
       "filetypes": ["c", "cpp", "objc", "objcpp"]
+    },
+    "metals": {
+      "command": "metals-vim",
+      "rootPatterns": ["build.sbt"],
+      "filetypes": ["scala", "sbt"]
     }
   },
   "coc.preferences.formatOnSaveFiletypes": [

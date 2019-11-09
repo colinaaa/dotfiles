@@ -18,7 +18,11 @@ Plug 'majutsushi/tagbar'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'octol/vim-cpp-enhanced-highlight'
+"Plug 'derekwyatt/vim-scala'
 Plug 'tpope/vim-markdown'
+"Plug 'vim-pandoc/vim-pandoc'
+"Plug 'vim-pandoc/vim-pandoc-syntax'
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 Plug 'luochen1990/rainbow'
 
 Plug 'SirVer/ultisnips'
@@ -200,7 +204,7 @@ endfunction
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
 command! LatexBuild :exe 'CocCommand latex.Build'
-map <C-b> :TagbarToggle<CR>
+nmap <leader>b :TagbarToggle<CR>
 
 " ---------------------------------------------------------------
 "  [nerdtree]
@@ -260,13 +264,11 @@ nmap <silent> gl :GitGutterLineHighlightsToggle<cr>
 " Don't change to directory when selecting a file
 let g:startify_files_number = 5
 let g:startify_change_to_dir = 0
-let g:startify_custom_header = [ ]
 let g:startify_relative_path = 1
 let g:startify_use_env = 1
         " Custom startup list, only show MRU from current directory/project
 let g:startify_lists = [
 \  { 'type': 'dir',       'header': [ 'Files '. getcwd() ] },
-\  { 'type': function('helpers#startify#listcommits'), 'header': [ 'Recent Commits' ] },
 \  { 'type': 'sessions',  'header': [ 'Sessions' ]       },
 \  { 'type': 'bookmarks', 'header': [ 'Bookmarks' ]      },
 \  { 'type': 'commands',  'header': [ 'Commands' ]       },
@@ -278,7 +280,7 @@ let g:startify_lists = [
         let g:startify_bookmarks = [
 \ { 'c': '~/.config/nvim/init.vim' },
 \ { 'g': '~/.gitconfig' },
-\ { 'z': '~/.zshrc' }
+\ { 'z': '~/.config/fish/config.fish' }
 \ ]
 autocmd User Startified setlocal cursorline
 nmap <leader>st :Startify<cr>
@@ -336,3 +338,8 @@ let g:cpp_member_variable_highlight = 1
 let g:cpp_class_decl_highlight = 1
 let g:cpp_experimental_template_highlight = 1
 
+" [goyo]
+nmap <leader>gy :Goyo<cr>
+
+" Configuration for vim-scala
+au BufRead,BufNewFile *.sbt set filetype=scala
