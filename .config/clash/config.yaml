@@ -103,14 +103,14 @@ Proxy:
 - { name: "socks", type: socks5, server: 127.0.0.1, port: 1080 }
 
 #   http
-- { name: "http", type: http, server: server, port: 1087 }
+#- { name: "http", type: http, server: server, port: 1087 }
 
 Proxy Group:
 # url-test 可以自动选择与指定 URL 测速后，延迟最短的服务器
-- { name: "test", type: url-test, proxies: ["http", "socks"], url: "https://www.bing.com", interval: 300 }
+- { name: "test", type: url-test, proxies: ["socks"], url: "https://www.bing.com", interval: 300 }
 
 # fallback 可以尽量按照用户书写的服务器顺序，在确保服务器可用的情况下，自动选择服务器
-- { name: "fallback-auto", type: fallback, proxies: ["http", "socks"], url: "https://www.bing.com", interval: 300 }
+- { name: "fallback-auto", type: fallback, proxies: ["socks"], url: "https://www.bing.com", interval: 300 }
 
 # load-balance 可以使相同 eTLD 请求在同一条代理线路上
 #- { name: "load-balance", type: load-balance, proxies: ["socks", "http"], url: "https://www.bing.com" }
