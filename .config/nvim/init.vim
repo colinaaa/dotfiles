@@ -7,7 +7,11 @@ call plug#begin(stdpath('data') . '/plugged')
 " On-demand loading
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'mbbill/undotree'
+
 Plug 'junegunn/goyo.vim'
+Plug 'junegunn/limelight.vim'
+
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'ryanoasis/vim-devicons'
@@ -20,6 +24,7 @@ Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'octol/vim-cpp-enhanced-highlight'
 "Plug 'derekwyatt/vim-scala'
 Plug 'tpope/vim-markdown'
+Plug 'lervag/vimtex'
 "Plug 'vim-pandoc/vim-pandoc'
 "Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
@@ -134,6 +139,9 @@ nmap <leader>. <c-^>
 " quickfix
 nmap <leader>qf  <Plug>(coc-fix-current)
 
+" undotree
+nmap <leader>ut :UndotreeToggle<cr>
+
 " exit terminal
 tnoremap <Esc> <C-\><C-n>
 
@@ -203,7 +211,6 @@ endfunction
 " Highlight symbol under cursor on CursorHold
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
-command! LatexBuild :exe 'CocCommand latex.Build'
 nmap <leader>b :TagbarToggle<CR>
 
 " ---------------------------------------------------------------
@@ -276,6 +283,8 @@ let g:startify_lists = [
         let g:startify_commands = [
 \   { 'up': [ 'Update Plugins', ':PlugUpdate' ] },
 \   { 'ug': [ 'Upgrade Plugin Manager', ':PlugUpgrade' ] },
+\   { 'in': [ 'Install Plugins', 'PlugInstall' ] },
+\   { 'll': [ 'Clean Plugins', 'PlugClean' ] }
 \ ]
         let g:startify_bookmarks = [
 \ { 'c': '~/.config/nvim/init.vim' },
@@ -340,6 +349,20 @@ let g:cpp_experimental_template_highlight = 1
 
 " [goyo]
 nmap <leader>gy :Goyo<cr>
+autocmd! User GoyoEnter Limelight
+autocmd! User GoyoLeave Limelight!
+let g:limelight_conceal_ctermfg = 'gray'
 
 " Configuration for vim-scala
 au BufRead,BufNewFile *.sbt set filetype=scala
+
+" [vimtex]
+let g:vimtex_compiler_latexmk = {
+    \ 'options' : [
+    \   '-xelatex',
+    \   '-verbose',
+    \   '-file-line-error',
+    \   '-synctex=1',
+    \   '-interaction=nonstopmode',
+    \ ],
+    \}

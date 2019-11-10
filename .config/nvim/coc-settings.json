@@ -2,10 +2,10 @@
     "list.insertMappings": {
         "<C-j>": "do:next"
     },
-    "latex.build.executable": "lualatex",
-    "latex.forwardSearch.executable": "open",
-    "latex.build.onSave": true,
-     "suggest.noselect": false,
+//    "latex.build.executable": "lualatex",
+//    "latex.forwardSearch.executable": "open",
+//    "latex.build.onSave": true,
+    "suggest.noselect": false,
     "languageserver": {
     "golang": {
       "command": "~/go/bin/gopls",
